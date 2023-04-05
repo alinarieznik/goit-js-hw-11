@@ -23,6 +23,7 @@ refs.formEl.addEventListener('submit', onSearch);
 refs.buttonLoadMoreEl.addEventListener('click', buttonLoadMore);
 
 async function onSearch(e) {
+  refs.buttonLoadMoreEl.classList.add('is-hidden');
   e.preventDefault();
   galleryElClear();
 
@@ -43,9 +44,7 @@ async function onSearch(e) {
       );
     }
     // console.log(images);
-
     renderGalleryMarkup(images.hits);
-    refs.buttonLoadMoreEl.classList.remove('is-hidden');
   } catch (error) {
     console.log(error);
   }
@@ -93,6 +92,7 @@ function renderGalleryMarkup(images) {
     .join('');
   refs.galleryEl.innerHTML = galleryMarkup;
   lightbox.refresh();
+  refs.buttonLoadMoreEl.classList.remove('is-hidden');
 }
 
 function galleryElClear() {
