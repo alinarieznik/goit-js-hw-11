@@ -1,8 +1,6 @@
 import axios from 'axios';
-console.log(axios);
-
-const API_KEY = '35068014-d2964fc8ed114a598c6b7cf51';
 const BASE_URL = 'https://pixabay.com/api/';
+const API_KEY = '35068014-d2964fc8ed114a598c6b7cf51';
 
 export default class PicsApiService {
   constructor() {
@@ -14,7 +12,7 @@ export default class PicsApiService {
     try {
       const response = await axios.get(`${BASE_URL}`, {
         params: {
-          key: `${API_KEY}`,
+          key: API_KEY,
           q: this.searchQuery,
           image_type: 'photo',
           orientation: 'horizontal',
@@ -23,6 +21,7 @@ export default class PicsApiService {
           per_page: 40,
         },
       });
+
       return response.data;
     } catch (error) {
       console.error(error);

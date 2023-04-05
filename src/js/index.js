@@ -1,9 +1,10 @@
-import '../css/styles.css';
 import PicsApiService from './api-pixabey';
 import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const refs = {
-  formEl: document.querySelector('.js-search-form'),
+  formEl: document.querySelector('.search-form'),
   galleryEl: document.querySelector('.gallery'),
   buttonLoadMoreEl: document.querySelector('.load-more'),
 };
@@ -17,19 +18,15 @@ async function onSearch(e) {
 
   picsApiService.query = e.target.elements['searchQuery'].value.trim();
 
-  if (picsApiService.query === '') {
-    refs.buttonLoadMoreEl.classList.add('is-hidden');
-    return;
-  }
-
   try {
-    const data = await picsApiService.fetchPhotos();
-    if (!data.hits.length) {
-      refs.buttonLoadMoreEl.classList.add('is-hidden');
-      return;
+    const images = await picsApiService.fetchPics();
+    if (images.hits.length === 0) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
     }
-    renderGalleryMarkup(images);
-    refs.buttonLoadMoreEl.classList.remove('is-hidden');
+    // console.log(images);
+    renderGalleryMarkup(images.hits);
   } catch (error) {
     console.log(error);
   }
@@ -37,8 +34,8 @@ async function onSearch(e) {
 
 function renderGalleryMarkup(images) {
   const galleryMarkup = images
-    .map(image => {
-      const {
+    .map(
+      ({
         webformatURL,
         largeImageURL,
         tags,
@@ -46,28 +43,33 @@ function renderGalleryMarkup(images) {
         views,
         comments,
         downloads,
-      } = image;
-      return `
-        <div class="photo-card">
-        <a class='gallery-item' href='${largeImageURL}'>
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-  <div class="info">
-    <p class="info-item">
-      <b>Likes ${likes}</b>
-    </p>
-    <p class="info-item">
-      <b>Views ${views}</b>
-    </p>
-    <p class="info-item">
-      <b>Comments ${comments}</b>
-    </p>
-    <p class="info-item">
-      <b>Downloads ${downloads}</b>
-    </p>
+      }) => {
+        return `
+          <div class="photo-card">
+          <a class='gallery-item' href='${largeImageURL}'>
+    <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+    <div class="info">
+      <p class="info-item">
+        <b>Likes</b>
+        ${likes}
+      </p>
+      <p class="info-item">
+        <b>Views</b>
+        ${views}
+      </p>
+      <p class="info-item">
+        <b>Comments</b>
+        ${comments}
+      </p>
+      <p class="info-item">
+        <b>Downloads</b>
+        ${downloads}
+      </p>
+    </div>
   </div>
-</div>
-        `;
-    })
+          `;
+      }
+    )
     .join('');
   refs.galleryEl.innerHTML = galleryMarkup;
 }
