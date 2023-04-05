@@ -10,10 +10,12 @@ const refs = {
   buttonSearch: document.querySelector('.search-button'),
 };
 
-let gallery = new SimpleLightbox('.gallery a', {
+let lightbox = new SimpleLightbox('.photo-card a', {
+  captions: true,
   captionDelay: 250,
-  captionsData: 'alt',
 });
+
+refs.buttonLoadMoreEl.classList.add('is-hidden');
 
 const picsApiService = new PicsApiService();
 
@@ -24,18 +26,26 @@ async function onSearch(e) {
   e.preventDefault();
   galleryElClear();
 
-  picsApiService.query = e.target.elements['searchQuery'].value.trim();
+  picsApiService.query = e.currentTarget.elements.searchQuery.value.trim();
   picsApiService.resetPage();
 
   try {
     const images = await picsApiService.fetchPics();
+    if (picsApiService.query === '') {
+      refs.buttonLoadMoreEl.classList.add('is-hidden');
+      Notiflix.Notify.warning('Please, fill the main field');
+      return;
+    }
     if (images.hits.length === 0) {
+      refs.buttonLoadMoreEl.classList.add('is-hidden');
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
     // console.log(images);
+
     renderGalleryMarkup(images.hits);
+    refs.buttonLoadMoreEl.classList.remove('is-hidden');
   } catch (error) {
     console.log(error);
   }
@@ -55,8 +65,9 @@ function renderGalleryMarkup(images) {
       }) => {
         return `
           <div class="photo-card">
-          <a class='gallery-item' href='${largeImageURL}'>
+          <a href='${largeImageURL}'>
     <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+    </a>
     <div class="info">
       <p class="info-item">
         <b>Likes</b>
@@ -81,6 +92,7 @@ function renderGalleryMarkup(images) {
     )
     .join('');
   refs.galleryEl.innerHTML = galleryMarkup;
+  lightbox.refresh();
 }
 
 function galleryElClear() {
@@ -93,7 +105,6 @@ async function buttonLoadMore() {
     const images = await picsApiService.fetchPics();
     // console.log(images);
     renderGalleryMarkup(images.hits);
-    gallery.refresh();
   } catch (error) {
     console.log(error);
   }

@@ -20,7 +20,7 @@ input {
 }
 
 .photo-card {
-  flex-basis: calc(100% / 4 - 30px);
+  flex-basis: calc(100% / 3 - 30px);
   margin-right: 30px;
   margin-bottom: 55px;
 }
@@ -33,7 +33,16 @@ input {
 .info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   text-align: center;
+  padding: 5px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin: 0;
 }
 
 .gallery-item {
@@ -49,7 +58,7 @@ input {
 .load-more {
   display: block;
   margin: 0 auto;
-  margin-top: 60px;
+  margin-top: 20px;
   cursor: pointer;
 
   font-weight: 500;
@@ -66,12 +75,15 @@ input {
   border: 1px solid rgb(176, 104, 8);
 }
 
+.load-more.is-hidden {
+  display: none;
+}
+
 .search-button {
   cursor: pointer;
 
   font-weight: 500;
   font-size: 16px;
-  line-height: calc(26 / 16);
   text-align: center;
 
   color: rgb(0, 0, 0);
