@@ -1,4 +1,5 @@
 .search-form {
+  background-color: rgb(234, 171, 89);
   display: flex;
   justify-content: center;
   gap: 5px;
@@ -40,6 +41,11 @@ input {
   color: black;
 }
 
+.photo-card {
+  padding-bottom: 60px;
+  box-shadow: 0 1px 3px #0003, 0 1px 1px #00000024, 0 2px 1px -1px #0000001f;
+}
+
 .load-more {
   display: block;
   margin: 0 auto;
@@ -56,8 +62,8 @@ input {
 
   padding: 6px 22px;
 
-  border-radius: 4px;
-  border-color: transparent;
+  border-radius: 5px;
+  border: 1px solid rgb(176, 104, 8);
 }
 
 .search-button {
@@ -73,6 +79,6 @@ input {
 
   padding: 6px 16px;
 
-  border-radius: 4px;
-  border-color: transparent;
+  border-radius: 5px;
+  border: 1px solid rgb(176, 104, 8);
 }

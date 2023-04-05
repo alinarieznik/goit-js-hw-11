@@ -7,6 +7,7 @@ const refs = {
   formEl: document.querySelector('.search-form'),
   galleryEl: document.querySelector('.gallery'),
   buttonLoadMoreEl: document.querySelector('.load-more'),
+  buttonSearch: document.querySelector('.search-button'),
 };
 
 let gallery = new SimpleLightbox('.gallery a', {
