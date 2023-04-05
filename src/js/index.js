@@ -9,15 +9,22 @@ const refs = {
   buttonLoadMoreEl: document.querySelector('.load-more'),
 };
 
+let gallery = new SimpleLightbox('.gallery a', {
+  captionDelay: 250,
+  captionsData: 'alt',
+});
+
 const picsApiService = new PicsApiService();
 
 refs.formEl.addEventListener('submit', onSearch);
+refs.buttonLoadMoreEl.addEventListener('click', buttonLoadMore);
 
 async function onSearch(e) {
   e.preventDefault();
   galleryElClear();
 
   picsApiService.query = e.target.elements['searchQuery'].value.trim();
+  picsApiService.resetPage();
 
   try {
     const images = await picsApiService.fetchPics();
@@ -77,4 +84,16 @@ function renderGalleryMarkup(images) {
 
 function galleryElClear() {
   refs.galleryEl.innerHTML = '';
+}
+
+async function buttonLoadMore() {
+  picsApiService.incrementPage();
+  try {
+    const images = await picsApiService.fetchPics();
+    // console.log(images);
+    renderGalleryMarkup(images.hits);
+    gallery.refresh();
+  } catch (error) {
+    console.log(error);
+  }
 }
