@@ -15,6 +15,7 @@ refs.formEl.addEventListener('submit', onSearch);
 
 async function onSearch(e) {
   e.preventDefault();
+  galleryElClear();
 
   picsApiService.query = e.target.elements['searchQuery'].value.trim();
 
@@ -72,4 +73,8 @@ function renderGalleryMarkup(images) {
     )
     .join('');
   refs.galleryEl.innerHTML = galleryMarkup;
+}
+
+function galleryElClear() {
+  refs.galleryEl.innerHTML = '';
 }
