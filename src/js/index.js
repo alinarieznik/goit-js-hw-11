@@ -29,14 +29,14 @@ async function onSearch(e) {
 
   picsApiService.query = e.currentTarget.elements.searchQuery.value.trim();
   picsApiService.resetPage();
+  if (!picsApiService.query) {
+    refs.buttonLoadMoreEl.classList.add('is-hidden');
+    Notiflix.Notify.warning('Please, fill the main field');
+    return;
+  }
 
   try {
     const images = await picsApiService.fetchPics();
-    if (picsApiService.query === '') {
-      refs.buttonLoadMoreEl.classList.add('is-hidden');
-      Notiflix.Notify.warning('Please, fill the main field');
-      return;
-    }
     if (!images.hits.length) {
       refs.buttonLoadMoreEl.classList.add('is-hidden');
       Notiflix.Notify.failure(
@@ -47,6 +47,10 @@ async function onSearch(e) {
     // console.log(images);
     renderGalleryMarkup(images.hits);
     Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
+    if (refs.galleryEl.childElementCount >= images.totalHits) {
+      refs.buttonLoadMoreEl.classList.add('is-hidden');
+      return;
+    }
   } catch (error) {
     console.log(error);
   }
