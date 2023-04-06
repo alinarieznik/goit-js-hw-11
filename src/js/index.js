@@ -107,6 +107,19 @@ async function buttonLoadMore() {
     const images = await picsApiService.fetchPics();
     // console.log(images);
     renderGalleryMarkup(images.hits);
+
+    //   2 option how to do
+    // let total = 0;
+    // for (let i = 0; i < images.totalHits; i += 40) {
+    //   if ((total += i >= images.totalHits)) {
+    //     Notiflix.Notify.failure(
+    //       "We're sorry, but you've reached the end of search results."
+    //     );
+    //     refs.buttonLoadMoreEl.classList.add('is-hidden');
+    //     return;
+    //   }
+    // }
+
     if (refs.galleryEl.childElementCount >= images.totalHits) {
       Notiflix.Notify.failure(
         "We're sorry, but you've reached the end of search results."
